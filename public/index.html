@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f2">
+    <meta name="description" content="A thoughtful little space for food, movement, and feeling good.">
+    <title>Goodday — your wellness, in rhythm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="Goodday home"><span class="brand-mark">g.</span> goodday</a>
+        <div class="side-label">YOUR SPACE</div>
+        <nav class="navigation" aria-label="Main navigation">
+          <button class="nav-item active" data-view="today"><span>◷</span> Today</button>
+          <button class="nav-item" data-view="food"><span>◉</span> Food log</button>
+          <button class="nav-item" data-view="pantry"><span>⌂</span> Pantry & recipes</button>
+          <button class="nav-item" data-view="movement"><span>↗</span> Movement</button>
+          <button class="nav-item" data-view="history"><span>▤</span> Progress</button>
+          <button class="nav-item" data-view="coach"><span>✳</span> Your AI coach</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-note"><span class="note-spark">✳</span><strong>Small steps count.</strong><p>Consistency is a practice, not a perfect streak.</p></div>
+          <span class="sidebar-version">YOUR PERSONAL WELLNESS SPACE</span>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="mobile-brand"><span class="brand-mark">g.</span> goodday</div>
+          <div class="topbar-date" id="today-date"></div>
+          <div class="topbar-right"><span class="status-dot"></span> YOUR PRIVATE SPACE <span class="avatar">Y</span></div>
+        </header>
+
+        <div class="page-content">
+          <section class="view-panel active" id="view-today">
+            <div class="welcome-row">
+              <div><p class="eyebrow" id="greeting">A FRESH PAGE</p><h1>Your day, <span>in rhythm.</span></h1><p class="intro">A little check-in with yourself. Progress, not perfection.</p></div>
+              <div class="date-pill"><span>✳</span> <span id="date-label"></span></div>
+            </div>
+
+            <div class="summary-grid">
+              <article class="card calorie-card">
+                <div class="card-heading"><div><span class="eyebrow">NOURISHMENT</span><h2>Calories</h2></div><span class="icon-bubble peach">◉</span></div>
+                <div class="calorie-layout">
+                  <div class="calorie-ring" id="calorie-ring"><div class="ring-inner"><strong id="calories-eaten">0</strong><span>eaten</span></div></div>
+                  <div class="calorie-numbers"><div><strong id="calories-left">2,000</strong><span>left today</span></div><div class="calorie-divider"></div><div class="burned-line"><span>Movement</span><strong id="calories-burned">0 kcal</strong></div></div>
+                </div>
+                <div class="goal-caption"><span>Daily guide</span><span id="calorie-goal-label">2,000 kcal</span></div>
+              </article>
+
+              <article class="card macros-card">
+                <div class="card-heading"><div><span class="eyebrow">THE GOOD STUFF</span><h2>Nutrition</h2></div><span class="icon-bubble lilac">✳</span></div>
+                <div class="macro-list">
+                  <div class="macro-row"><div class="macro-label"><span class="macro-dot protein"></span><span>Protein</span><strong id="protein-value">0g</strong></div><div class="bar-track"><div class="bar-fill protein-fill" id="protein-bar"></div></div><span class="macro-goal" id="protein-goal">of 120g</span></div>
+                  <div class="macro-row"><div class="macro-label"><span class="macro-dot carbs"></span><span>Carbs</span><strong id="carbs-value">0g</strong></div><div class="bar-track"><div class="bar-fill carbs-fill" id="carbs-bar"></div></div><span class="macro-goal">today</span></div>
+                  <div class="macro-row"><div class="macro-label"><span class="macro-dot fat"></span><span>Fat</span><strong id="fat-value">0g</strong></div><div class="bar-track"><div class="bar-fill fat-fill" id="fat-bar"></div></div><span class="macro-goal">today</span></div>
+                </div>
+                <button class="text-button" data-open="goals">Adjust your daily guides <span>↗</span></button>
+              </article>
+
+              <article class="card movement-card">
+                <div class="card-heading"><div><span class="eyebrow">MOVE YOUR WAY</span><h2>Movement</h2></div><span class="icon-bubble mint">↗</span></div>
+                <div class="movement-content"><div class="movement-count"><strong id="movement-count">0</strong><span>sessions today</span></div><div class="movement-art" aria-hidden="true"><span>〰</span><span>✳</span><span>↗</span></div></div>
+                <button class="soft-button" data-view="movement">Log some movement <span>+</span></button>
+              </article>
+            </div>
+
+            <div class="lower-grid">
+              <section class="card log-card">
+                <div class="section-heading"><div><span class="eyebrow">YOUR CHECK-IN</span><h2>Today's log</h2></div><button class="text-button" data-view="food">See all <span>↗</span></button></div>
+                <div class="entry-list" id="today-entries"><div class="empty-state"><span class="empty-icon">✳</span><strong>Your day is a blank canvas</strong><p>Add a meal or movement to get started.</p></div></div>
+                <div class="quick-actions"><button class="quick-action" data-view="food"><span class="quick-icon peach">+</span><span><strong>Log a meal</strong><small>Keep track of what nourishes you</small></span><b>↗</b></button><button class="quick-action" data-view="movement"><span class="quick-icon mint">↗</span><span><strong>Log movement</strong><small>Every kind of movement counts</small></span><b>↗</b></button></div>
+              </section>
+
+              <section class="card coach-card">
+                <div class="coach-decoration"><span>✳</span><span>✳</span></div>
+                <span class="eyebrow">A LITTLE HELP, WHEN YOU NEED IT</span><h2>Curious about<br>your next step?</h2>
+                <p>Ask your AI wellness companion for a meal idea, a gentle workout, or a fresh perspective.</p>
+                <button class="primary-button" data-view="coach">Chat with your coach <span>↗</span></button>
+                <div class="coach-footnote"><span>✳</span> Thoughtful ideas, tailored to you</div>
+              </section>
+            </div>
+          </section>
+
+          <section class="view-panel" id="view-history">
+            <div class="page-heading"><span class="eyebrow">YOUR JOURNEY, DAY BY DAY</span><h1>Your <span>progress.</span></h1><p>A look back at meals and movement from the last 30 days. Only days with entries are shown.</p></div>
+            <div class="history-overview">
+              <article class="card history-stat"><span class="eyebrow">CHECK-INS</span><strong id="history-days">0</strong><span>days with entries</span></article>
+              <article class="card history-stat"><span class="eyebrow">NOURISHMENT</span><strong id="history-meals">0</strong><span>meals and snacks</span></article>
+              <article class="card history-stat"><span class="eyebrow">MOVEMENT</span><strong id="history-movement">0</strong><span>sessions logged</span></article>
+            </div>
+            <section class="card history-card">
+              <div class="section-heading"><div><span class="eyebrow">RECENT ACTIVITY</span><h2>Daily history</h2></div><span class="count-pill">Last 30 days</span></div>
+              <div id="history-list" class="history-list"><div class="empty-state"><span class="empty-icon">✳</span><strong>Your history will show up here</strong><p>Log a meal or movement to start building your timeline.</p></div></div>
+            </section>
+          </section>
+
+          <section class="view-panel" id="view-food">
+            <div class="page-heading"><span class="eyebrow">NOURISHMENT, NOT NUMBERS</span><h1>Your food <span>log.</span></h1><p>Notice what you're eating, without judgment. Nutrition values are estimates.</p></div>
+            <div class="content-columns">
+              <section class="card form-card"><span class="eyebrow">ADD TO TODAY</span><h2>What did you enjoy?</h2>
+                <form id="meal-form" class="stack-form">
+                  <label>Meal or snack<input name="title" maxlength="100" placeholder="e.g. Avocado toast" required></label>
+                  <label>A little more detail <span class="optional">(optional)</span><input name="detail" maxlength="500" placeholder="e.g. 2 slices sourdough, ½ avocado"></label>
+                  <div class="form-grid"><label>Calories <span class="optional">kcal</span><input name="calories" type="number" min="0" max="10000" value="0" required></label><label>Protein <span class="optional">g</span><input name="protein" type="number" min="0" max="1000" step="0.1" value="0"></label><label>Carbohydrates <span class="optional">g</span><input name="carbs" type="number" min="0" max="1000" step="0.1" value="0"></label><label>Fat <span class="optional">g</span><input name="fat" type="number" min="0" max="1000" step="0.1" value="0"></label></div>
+                  <label>Fiber <span class="optional">g</span><input name="fiber" type="number" min="0" max="1000" step="0.1" value="0"></label>
+                  <button class="primary-button" type="submit">Add to my day <span>↗</span></button>
+                </form>
+              </section>
+              <section class="card list-card"><div class="section-heading"><div><span class="eyebrow">YOUR CHECK-IN</span><h2>Today, so far</h2></div><span class="count-pill" id="food-count">0 entries</span></div><div class="entry-list" id="food-entries"></div><div class="gentle-note">✳ <span>Numbers are only one small part of feeling well. Listen to your body, too.</span></div></section>
+            </div>
+          </section>
+
+          <section class="view-panel" id="view-pantry">
+            <div class="page-heading"><span class="eyebrow">MAKE SOMETHING LOVELY</span><h1>Your pantry <span>playbook.</span></h1><p>Tell us what's on hand. Get easy ideas and a short list for what you might want to pick up.</p></div>
+            <div class="content-columns pantry-columns">
+              <section class="card form-card"><span class="eyebrow">WHAT'S ON HAND?</span><h2>Your ingredients</h2><form id="pantry-form" class="stack-form"><label>Ingredients, separated by commas<textarea name="ingredients" rows="5" maxlength="3000" placeholder="Chickpeas, spinach, lemon, rice, Greek yogurt..."></textarea></label><p class="form-hint">Add up to 50 ingredients. Update this list any time your shelves change.</p><button class="primary-button" type="submit">Save my pantry <span>↗</span></button></form><div class="ingredient-chips" id="pantry-chips"></div></section>
+              <section class="card recipe-card"><span class="eyebrow">A LITTLE INSPIRATION</span><h2>What's cooking?</h2><p>Get a couple of approachable recipes using what you have, plus ideas for anything that's missing.</p><label class="sr-only" for="recipe-prompt">What kind of recipe are you looking for?</label><input id="recipe-prompt" class="standalone-input" maxlength="500" placeholder="e.g. quick lunch, vegetarian, cozy dinner"><button class="primary-button" id="recipe-button">Find recipe ideas <span>✳</span></button><div class="assistant-output" id="recipe-output"><div class="output-placeholder">Your recipe ideas will show up here ✳</div></div></section>
+            </div>
+          </section>
+
+          <section class="view-panel" id="view-movement">
+            <div class="page-heading"><span class="eyebrow">EVERY BODY MOVES DIFFERENTLY</span><h1>Find your <span>flow.</span></h1><p>From a walk around the block to a full workout, your movement belongs to you.</p></div>
+            <div class="content-columns">
+              <section class="card form-card"><span class="eyebrow">CELEBRATE THE MOVEMENT</span><h2>Log a session</h2><form id="exercise-form" class="stack-form"><label>What did you do?<input name="title" maxlength="100" placeholder="e.g. Brisk neighborhood walk" required></label><label>Duration or details <span class="optional">(optional)</span><input name="detail" maxlength="500" placeholder="e.g. 30 minutes, easy pace"></label><label>Estimated calories burned <span class="optional">kcal</span><input name="calories" type="number" min="0" max="10000" value="0" required></label><label>Muscles or areas worked <span class="optional">(optional)</span><input name="muscleGroups" maxlength="160" placeholder="e.g. Legs, glutes, cardiovascular"></label><button class="primary-button" type="submit">Add movement <span>↗</span></button><p class="form-hint">Calorie-burn estimates vary widely from person to person. It's okay to leave it at zero.</p></form></section>
+              <section class="card recipe-card workout-card"><span class="eyebrow">A WORKOUT THAT MEETS YOU HERE</span><h2>Need an idea?</h2><p>Tell your coach what feels good today: your energy level, time, equipment, or muscle groups.</p><input id="workout-prompt" class="standalone-input" maxlength="500" placeholder="e.g. 20 minutes, low-impact, no equipment"><button class="primary-button" id="workout-button">Suggest a workout <span>✳</span></button><div class="assistant-output" id="workout-output"><div class="output-placeholder">A gentle idea will appear here ✳</div></div></section>
+            </div>
+            <section class="card movement-history"><div class="section-heading"><div><span class="eyebrow">ALL MOVEMENT COUNTS</span><h2>Today's sessions</h2></div><span class="count-pill" id="movement-total">0 sessions</span></div><div class="entry-list" id="movement-entries"></div></section>
+          </section>
+
+          <section class="view-panel" id="view-coach">
+            <div class="page-heading"><span class="eyebrow">HERE FOR THE LITTLE THINGS</span><h1>Your wellness <span>companion.</span></h1><p>Ask a question, find a new idea, or just check in. No judgment, ever.</p></div>
+            <div class="chat-layout card">
+              <div class="chat-intro"><span class="chat-avatar">✳</span><div><strong>Goodday coach</strong><span><i></i> Ready when you are</span></div><span class="ai-label">POWERED BY LLAMA 3.3</span></div>
+              <div class="chat-messages" id="chat-messages"><div class="message assistant-message"><span class="message-avatar">✳</span><div class="message-bubble"><p>Hi there! I'm here to help you find ideas that feel right for you. I can suggest recipes from your pantry, think up a workout, or help you reflect on your day. What's on your mind?</p><small>YOUR WELLNESS COMPANION</small></div></div></div>
+              <div class="suggestion-row"><button class="suggestion-chip">What could I make with my pantry?</button><button class="suggestion-chip">Suggest a gentle workout</button><button class="suggestion-chip">How's my day going?</button></div>
+              <form id="chat-form" class="chat-form"><label class="sr-only" for="chat-input">Message your wellness coach</label><textarea id="chat-input" maxlength="2000" rows="1" placeholder="Type a message..."></textarea><button type="submit" aria-label="Send message">↑</button></form>
+              <div class="chat-disclaimer">General wellness ideas, not medical advice. AI can make mistakes; check important nutrition information.</div>
+            </div>
+          </section>
+
+          <section class="view-panel" id="view-goals">
+            <div class="page-heading"><span class="eyebrow">YOUR GUIDES, YOUR WAY</span><h1>Daily <span>guides.</span></h1><p>These are optional reference points, not rules. Choose what feels useful to you.</p></div>
+            <section class="card form-card goals-form-card"><form id="goals-form" class="stack-form"><label>Calorie guide <span class="optional">kcal</span><input name="calories" type="number" min="500" max="10000" required></label><label>Protein guide <span class="optional">g</span><input name="protein" type="number" min="10" max="1000" required></label><button class="primary-button" type="submit">Save my guides <span>↗</span></button></form><p class="form-hint">If you have health or nutrition concerns, a qualified healthcare professional or registered dietitian can offer personalized guidance.</p></section>
+          </section>
+          <footer class="page-footer"><span>GOODDAY, AT YOUR OWN PACE.</span><span>Made for feeling good, not being perfect <b>✳</b></span></footer>
+        </div>
+      </main>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>
