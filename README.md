@@ -1,8 +1,17 @@
 # Goodday
 
-A diet and fitness tracker/assistant built for Cloudflare Workers. It pairs a responsive chat-first wellness dashboard with Workers AI (Llama 3.3) and D1-backed meal, movement, pantry, goals, and recent conversation state.
+Goodday is a demo diet and fitness tracker/assistant built to demonstrate Cloudflare application functionality. It runs locally with Wrangler and local D1, and is **not currently deployed as a public or production application**. The project shows how a Cloudflare Worker can serve a browser app, expose authenticated APIs, persist user data, and call Workers AI. Its configuration can be extended to connect to additional deployed Cloudflare products when you choose to provision and configure them.
 
-The Worker API is organized under `src/routes/` with shared request and profile helpers in `src/lib/`. Browser application code lives in `src/client/` as TypeScript and is bundled to `public/app.js` by the build step.
+The Worker API is organized under `src/routes/`, with shared request and profile helpers in `src/lib/`. Browser application code lives in `src/client/` as TypeScript and is bundled into `public/app.js`.
+
+## Cloudflare functionality demonstrated
+
+- **Workers** handle same-origin API requests and serve the browser app from the configured static assets directory.
+- **D1** stores accounts, sessions, food and movement entries, goals, fitness profiles, pantry ingredients, and recent chat history.
+- **Workers AI** runs Llama 3.3 for nutrition and exercise estimates and for the chat coach's responses and requested log actions.
+- **Wrangler local development** provides a local Worker and local D1 database for trying the application without first deploying it or creating a remote D1 database.
+
+The current app does not require Cloudflare Workflows, Durable Objects, Pages, or Realtime. They could be integrated later for needs such as durable multi-step tasks, real-time voice experiences, or other deployment architectures.
 
 ## What it does
 
@@ -28,32 +37,41 @@ Fitness profile fields are optional and editable. Gender identity is used only f
 
 Users can create an account with a unique username and a password of at least 12 characters. Passwords are never stored in readable or reversibly encrypted form: the Worker stores a per-account random salt and a PBKDF2-HMAC-SHA-256 hash (600,000 iterations). The Worker redirects production HTTP requests to HTTPS and enables HSTS; the opaque, random session token is delivered in a `Secure`, `HttpOnly`, `SameSite=Strict` cookie, while only its SHA-256 hash is stored in D1. Sessions expire after 30 days, and failed sign-ins and account creation are rate-limited. Protected API routes use the signed-in account identity from the server session, not a browser-supplied profile ID.
 
-Run the local startup script to create three demo accounts along with the sample data. For example, sign in with username `demo1` and password `GooddayDemo2026-1!`. These are development-only credentials; do not seed them into a production database. New accounts currently have no email verification or password-recovery flow, so add those (and consider Cloudflare Access or MFA) before using the app for production or sensitive data. Keep all profile details optional and only enter information you are comfortable storing.
+Run the local startup script to create three demo accounts along with the sample data. Sign in through the app with username `demo1` and password `GooddayDemo2026-1!`. These are development-only credentials; do not seed them into a production database. New accounts currently have no email verification or password-recovery flow, so add those (and consider Cloudflare Access or MFA) before using the app for production or sensitive data. Keep all profile details optional and only enter information you are comfortable storing.
 
 ## Run locally
 
-1. Install Node.js, then run `npm install`.
-2. Create a D1 database and update `database_id` in `wrangler.toml`:
+1. Install Node.js, then install dependencies:
 
    ```sh
-   npx wrangler d1 create goodday-tracker
+   npm install
    ```
 
-3. Start the local Worker. The local dev scripts apply migrations, insert demo data without duplicates, and build the browser bundle:
+2. Start the local Worker. The local dev script applies migrations, inserts demo data without overwriting existing entries, and builds the browser bundle:
 
    ```sh
    npm run dev:local
    ```
 
-   Open `http://127.0.0.1:8788` and use the local-only profile selector in the header to switch among the three sample users. `npm run dev` also seeds the local D1 database before starting Wrangler. The seed can be safely re-run with `npm run db:seed:local`; it does not overwrite existing sample entries or pantry changes.
+   Open `http://127.0.0.1:8788` and sign in with one of the local demo accounts, for example `demo1` / `GooddayDemo2026-1!`. `npm run dev` also prepares the local database before starting Wrangler. You can safely rerun `npm run db:seed:local`; it does not overwrite existing sample entries or pantry changes.
 
-Workers AI must be available to your Cloudflare account. The application uses `@cf/meta/llama-3.3-70b-instruct-fp8-fast`. The AI binding is remote during local development, so authenticate Wrangler (`npx wrangler login`) or configure `CLOUDFLARE_API_TOKEN` before using AI features locally. Local AI requests reach your Cloudflare account and may incur usage charges.
+The app's D1 data is local, but its Workers AI binding is configured as remote. To use AI features locally, Workers AI must be available to your Cloudflare account and Wrangler must be authenticated (`npx wrangler login`) or have a `CLOUDFLARE_API_TOKEN` configured. AI requests reach your Cloudflare account and may incur usage charges. The application uses `@cf/meta/llama-3.3-70b-instruct-fp8-fast`.
 
-## Deploy
+Run the API unit tests and TypeScript check with:
 
 ```sh
+npm test
+npm run typecheck
+```
+
+## Optional Cloudflare deployment
+
+The project is not deployed by default. To create your own deployment, provision a remote D1 database, replace the placeholder `database_id` in `wrangler.toml`, configure and apply the remote migrations, and deploy the Worker:
+
+```sh
+npx wrangler d1 create goodday-tracker
 npx wrangler d1 migrations apply goodday-tracker --remote
 npm run deploy
 ```
 
-The Worker serves the static app in `public/` and handles same-origin `/api/*` requests. D1 bindings and the Workers AI binding are configured in `wrangler.toml`.
+Before deploying, review the security and account limitations above, ensure demo seeding is not run against production, and configure production secrets and bindings appropriately. `wrangler.toml` currently configures the D1 and Workers AI bindings; additional Cloudflare services can be added there and wired into the Worker as the project grows.
