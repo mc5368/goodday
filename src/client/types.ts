@@ -1,6 +1,6 @@
-import type { AssistantMode, EntryType } from "../types";
+import type { AssistantMode, EntryType, FitnessProfile } from "../types";
 
-export type { AssistantMode, EntryType };
+export type { AssistantMode, EntryType, FitnessProfile };
 
 export interface Entry {
   id: string;
@@ -26,6 +26,7 @@ export interface TrackerState {
   history: Entry[];
   pantry: string[];
   goals: { calories: number; protein: number };
+  fitnessProfile: FitnessProfile;
   messages: ChatMessage[];
 }
 
@@ -33,11 +34,13 @@ export interface StateResponse {
   entries: Entry[];
   pantry: string[];
   goals: TrackerState["goals"];
+  fitnessProfile: FitnessProfile;
   messages: ChatMessage[];
 }
 
 export interface HistoryResponse {
   entries: Entry[];
+  range?: number;
 }
 
 export interface AssistantResponse {

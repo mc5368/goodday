@@ -1,7 +1,7 @@
 import { initializeDashboard } from "./dashboard";
-import { initializeDemoUserSelector } from "./demoUsers";
 import { initializeApp } from "./forms";
+import { initializeLogSorting } from "./logSort";
 
 initializeDashboard();
-initializeDemoUserSelector();
+initializeLogSorting();
 void initializeApp();

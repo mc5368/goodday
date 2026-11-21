@@ -2,6 +2,7 @@ import {
   createEntry,
   estimateExercise,
   estimateMeal,
+  updateFitnessProfile,
   updateGoals,
   updatePantry,
   loadState,
@@ -9,9 +10,10 @@ import {
 } from "./api";
 import { bindChat, renderChatHistory } from "./chat";
 import { renderDashboard, renderEntriesForView } from "./dashboard";
-import { refreshHistory } from "./history";
+import { bindHistory, refreshHistory } from "./history";
 import { element, elements } from "./dom";
 import { notify } from "./notifications";
+import { initializeAuthentication } from "./authentication";
 import { state } from "./state";
 import type { EntryType } from "./types";
 
@@ -23,7 +25,7 @@ async function refreshTracker(): Promise<void> {
 
 function inputValue(form: HTMLFormElement, name: string): string {
   const field = form.elements.namedItem(name);
-  if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
+  if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement)) {
     throw new Error(`Missing form field: ${name}`);
   }
   return field.value;
@@ -198,6 +200,36 @@ export function bindForms(): void {
       handleFormError(error);
     }
   });
+
+  element<HTMLFormElement>("#fitness-profile-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const optionalNumber = (name: string): number | null => {
+      const value = inputValue(form, name).trim();
+      return value ? Number(value) : null;
+    };
+    try {
+      await updateFitnessProfile({
+        fitnessGoal: inputValue(form, "fitnessGoal"),
+        goalDetails: inputValue(form, "goalDetails"),
+        age: optionalNumber("age"),
+        genderIdentity: inputValue(form, "genderIdentity"),
+        heightCm: optionalNumber("heightCm"),
+        weightKg: optionalNumber("weightKg"),
+        activityLevel: inputValue(form, "activityLevel"),
+        trainingExperience: inputValue(form, "trainingExperience"),
+        targetEvent: inputValue(form, "targetEvent"),
+        targetEventDate: inputValue(form, "targetEventDate"),
+        limitations: inputValue(form, "limitations"),
+        equipment: inputValue(form, "equipment"),
+        preferredActivities: inputValue(form, "preferredActivities"),
+      });
+      await refreshTracker();
+      notify("Your fitness profile is updated ✳");
+    } catch (error) {
+      handleFormError(error);
+    }
+  });
 }
 
 function showView(name: string): void {
@@ -237,9 +269,12 @@ export async function initializeApp(): Promise<void> {
   bindNavigation();
   bindForms();
   bindChat();
-  try {
-    await refreshTracker();
-  } catch (error) {
-    notify(`Couldn't load your tracker: ${error instanceof Error ? error.message : "Please try again."}`, true);
-  }
+  bindHistory();
+  await initializeAuthentication(async () => {
+    try {
+      await refreshTracker();
+    } catch (error) {
+      notify(`Couldn't load your tracker: ${error instanceof Error ? error.message : "Please try again."}`, true);
+    }
+  });
 }

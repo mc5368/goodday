@@ -41,7 +41,7 @@ export async function askAssistant(
     ? element<HTMLButtonElement>("#recipe-button")
     : mode === "workout"
       ? element<HTMLButtonElement>("#workout-button")
-      : element<HTMLButtonElement>("#chat-form button");
+      : element<HTMLButtonElement>("#chat-form button[type=submit]");
   const original = button.innerHTML;
   button.disabled = true;
   button.textContent = "Thinking...";
@@ -72,6 +72,26 @@ export async function askAssistant(
 }
 
 export function bindChat(): void {
+  const panel = element<HTMLElement>("#coach-panel");
+  const launcher = element<HTMLButtonElement>("#coach-launcher");
+  const setCoachOpen = (open: boolean): void => {
+    panel.hidden = !open;
+    panel.setAttribute("aria-hidden", String(!open));
+    launcher.setAttribute("aria-expanded", String(open));
+    launcher.setAttribute("aria-label", open ? "Close AI coach chat" : "Open AI coach chat");
+    if (open) element<HTMLTextAreaElement>("#chat-input").focus();
+    else launcher.focus();
+  };
+
+  launcher.addEventListener("click", () => setCoachOpen(panel.hidden));
+  element<HTMLButtonElement>("#coach-close").addEventListener("click", () => setCoachOpen(false));
+  elements<HTMLButtonElement>("[data-chat-open]").forEach((button) => {
+    button.addEventListener("click", () => setCoachOpen(true));
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !panel.hidden) setCoachOpen(false);
+  });
+
   element<HTMLButtonElement>("#chat-mic").addEventListener("click", () => {
     startVoiceInput(element<HTMLTextAreaElement>("#chat-input"), element<HTMLButtonElement>("#chat-mic"));
   });

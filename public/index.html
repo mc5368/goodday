@@ -13,7 +13,29 @@
     <script src="/app.js" defer></script>
   </head>
   <body>
-    <div class="app-shell">
+    <section class="auth-screen" id="auth-screen" aria-labelledby="auth-title">
+      <div class="auth-card">
+        <a class="brand auth-brand" href="#" aria-label="Goodday home"><span class="brand-mark">g.</span> goodday</a>
+        <span class="eyebrow">YOUR PERSONAL WELLNESS SPACE</span>
+        <h1 id="auth-title">Welcome <span>back.</span></h1>
+        <p class="auth-intro">Sign in to continue to your food, movement, and progress logs.</p>
+        <form id="login-form" class="stack-form auth-form" autocomplete="on">
+          <label>Username<input name="username" type="text" minlength="3" maxlength="32" autocomplete="username" required></label>
+          <label>Password<span class="password-field"><input id="login-password" name="password" type="password" minlength="12" maxlength="128" autocomplete="current-password" required><button class="password-toggle" data-password-toggle="login-password" type="button" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+          <button class="primary-button" type="submit">Sign in <span>↗</span></button>
+          <button class="auth-switch" data-auth-mode="register" type="button">New here? Create an account</button>
+        </form>
+        <form id="register-form" class="stack-form auth-form" autocomplete="on" hidden>
+          <label>Choose a username <span class="optional">(3–32 letters, numbers, dots, underscores, or hyphens)</span><input name="username" type="text" minlength="3" maxlength="32" autocomplete="username" required></label>
+          <label>Create a password <span class="optional">(at least 12 characters)</span><span class="password-field"><input id="register-password" name="password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required><button class="password-toggle" data-password-toggle="register-password" type="button" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+          <button class="primary-button" type="submit">Create account <span>↗</span></button>
+          <button class="auth-switch" data-auth-mode="login" type="button">Already have an account? Sign in</button>
+        </form>
+        <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
+        <p class="auth-disclaimer">Your password is stored as a one-way salted hash, not as readable text. This wellness tool is not medical care.</p>
+      </div>
+    </section>
+    <div class="app-shell" hidden>
       <aside class="sidebar">
         <a class="brand" href="#" aria-label="Goodday home"><span class="brand-mark">g.</span> goodday</a>
         <div class="side-label">YOUR SPACE</div>
@@ -23,7 +45,7 @@
           <button class="nav-item" data-view="pantry"><span>⌂</span> Pantry & recipes</button>
           <button class="nav-item" data-view="movement"><span>↗</span> Movement</button>
           <button class="nav-item" data-view="history"><span>▤</span> Progress</button>
-          <button class="nav-item" data-view="coach"><span>✳</span> Your AI coach</button>
+          <button class="nav-item" data-view="goals"><span>◎</span> Goals & profile</button>
         </nav>
         <div class="sidebar-bottom">
           <div class="sidebar-note"><span class="note-spark">✳</span><strong>Small steps count.</strong><p>Consistency is a practice, not a perfect streak.</p></div>
@@ -35,7 +57,7 @@
         <header class="topbar">
           <div class="mobile-brand"><span class="brand-mark">g.</span> goodday</div>
           <div class="topbar-date" id="today-date"></div>
-          <div class="topbar-right"><span class="status-dot"></span><span class="privacy-label">YOUR PRIVATE SPACE</span><select id="demo-user-select" class="demo-user-select" aria-label="Select local demo profile" hidden><option value="11111111-1111-4111-8111-111111111111">Demo profile 1</option><option value="22222222-2222-4222-8222-222222222222">Demo profile 2</option><option value="33333333-3333-4333-8333-333333333333">Demo profile 3</option></select><span class="avatar">Y</span></div>
+          <div class="topbar-right"><span class="status-dot"></span><span class="privacy-label">SIGNED IN</span><span id="account-name"></span><span class="avatar" id="account-avatar"></span><button class="logout-button" id="logout-button" type="button">Sign out</button></div>
         </header>
 
         <div class="page-content">
@@ -67,14 +89,17 @@
 
               <article class="card movement-card">
                 <div class="card-heading"><div><span class="eyebrow">MOVE YOUR WAY</span><h2>Movement</h2></div><span class="icon-bubble mint">↗</span></div>
-                <div class="movement-content"><div class="movement-count"><strong id="movement-count">0</strong><span>sessions today</span></div><div class="movement-art" aria-hidden="true"><span>〰</span><span>✳</span><span>↗</span></div></div>
+                <div class="movement-content">
+                  <div class="movement-stats"><div class="movement-count"><strong id="movement-count">0</strong><span>sessions today</span></div><div class="movement-calories"><span>Calories burned</span><strong id="movement-card-calories">0 kcal</strong></div></div>
+                  <div class="movement-muscle-summary"><span>Muscles trained</span><strong id="movement-card-muscles">None yet</strong></div>
+                </div>
                 <button class="soft-button" data-view="movement">Log some movement <span>+</span></button>
               </article>
             </div>
 
             <div class="lower-grid">
               <section class="card log-card">
-                <div class="section-heading"><div><span class="eyebrow">YOUR CHECK-IN</span><h2>Today's log</h2></div><button class="text-button" data-view="food">See all <span>↗</span></button></div>
+                <div class="section-heading"><div><span class="eyebrow">YOUR CHECK-IN</span><h2>Today's log</h2></div><label class="log-sort-control"><span>Sort by time</span><select data-log-sort aria-label="Sort today's log by time"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label></div>
                 <div class="entry-list" id="today-entries"><div class="empty-state"><span class="empty-icon">✳</span><strong>Your day is a blank canvas</strong><p>Add a meal or movement to get started.</p></div></div>
                 <div class="quick-actions"><button class="quick-action" data-view="food"><span class="quick-icon peach">+</span><span><strong>Log a meal</strong><small>Keep track of what nourishes you</small></span><b>↗</b></button><button class="quick-action" data-view="movement"><span class="quick-icon mint">↗</span><span><strong>Log movement</strong><small>Every kind of movement counts</small></span><b>↗</b></button></div>
               </section>
@@ -83,21 +108,46 @@
                 <div class="coach-decoration"><span>✳</span><span>✳</span></div>
                 <span class="eyebrow">A LITTLE HELP, WHEN YOU NEED IT</span><h2>Curious about<br>your next step?</h2>
                 <p>Ask your AI wellness companion for a meal idea, a gentle workout, or a fresh perspective.</p>
-                <button class="primary-button" data-view="coach">Chat with your coach <span>↗</span></button>
+                <button class="primary-button" data-chat-open>Chat with your coach <span>↗</span></button>
                 <div class="coach-footnote"><span>✳</span> Thoughtful ideas, tailored to you</div>
               </section>
             </div>
           </section>
 
           <section class="view-panel" id="view-history">
-            <div class="page-heading"><span class="eyebrow">YOUR JOURNEY, DAY BY DAY</span><h1>Your <span>progress.</span></h1><p>A look back at meals and movement from the last 30 days. Only days with entries are shown.</p></div>
+            <div class="page-heading"><span class="eyebrow">YOUR JOURNEY, DAY BY DAY</span><h1>Your <span>progress.</span></h1><p>Explore your nutrition and movement patterns over time. Choose a time range and a measure that matters to you.</p></div>
             <div class="history-overview">
               <article class="card history-stat"><span class="eyebrow">CHECK-INS</span><strong id="history-days">0</strong><span>days with entries</span></article>
               <article class="card history-stat"><span class="eyebrow">NOURISHMENT</span><strong id="history-meals">0</strong><span>meals and snacks</span></article>
               <article class="card history-stat"><span class="eyebrow">MOVEMENT</span><strong id="history-movement">0</strong><span>sessions logged</span></article>
             </div>
+            <section class="card progress-chart-card" aria-labelledby="progress-chart-title">
+              <div class="progress-chart-heading">
+                <div><span class="eyebrow">YOUR TRENDS</span><h2 id="progress-chart-title">Progress over time</h2></div>
+                <label class="chart-measure">Measure
+                  <select id="history-metric" aria-label="Progress chart measure">
+                    <option value="calories">Calories eaten</option>
+                    <option value="protein">Protein</option>
+                    <option value="carbs">Carbohydrates</option>
+                    <option value="fat">Fat</option>
+                    <option value="fiber">Fiber</option>
+                    <option value="movement">Movement sessions</option>
+                    <option value="burned">Movement calories</option>
+                  </select>
+                </label>
+              </div>
+              <div class="chart-range-controls" role="group" aria-label="Chart time range">
+                <button type="button" class="chart-range active" data-history-days="7" aria-pressed="true">7 days</button>
+                <button type="button" class="chart-range" data-history-days="30" aria-pressed="false">30 days</button>
+                <button type="button" class="chart-range" data-history-days="90" aria-pressed="false">90 days</button>
+                <button type="button" class="chart-range" data-history-days="365" aria-pressed="false">1 year</button>
+              </div>
+              <div class="chart-summary" id="history-chart-summary" aria-live="polite"></div>
+              <div class="chart-plot" id="history-chart" role="img" aria-label="Daily calories eaten over the last 7 days"></div>
+              <p class="chart-note">Daily totals come from your logged entries. Missing days are shown as zero; estimates and logs may be incomplete.</p>
+            </section>
             <section class="card history-card">
-              <div class="section-heading"><div><span class="eyebrow">RECENT ACTIVITY</span><h2>Daily history</h2></div><span class="count-pill">Last 30 days</span></div>
+              <div class="section-heading"><div><span class="eyebrow">RECENT ACTIVITY</span><h2>Daily history</h2></div><div class="log-list-controls"><label class="log-sort-control"><span>Sort by time</span><select data-log-sort aria-label="Sort daily history by time"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label><span class="count-pill" id="history-range-label">Last 7 days</span></div></div>
               <div id="history-list" class="history-list"><div class="empty-state"><span class="empty-icon">✳</span><strong>Your history will show up here</strong><p>Log a meal or movement to start building your timeline.</p></div></div>
             </section>
           </section>
@@ -116,7 +166,7 @@
                   <button class="primary-button" type="submit">Add to my day <span>↗</span></button>
                 </form>
               </section>
-              <section class="card list-card"><div class="section-heading"><div><span class="eyebrow">YOUR CHECK-IN</span><h2>Today, so far</h2></div><span class="count-pill" id="food-count">0 entries</span></div><div class="entry-list" id="food-entries"></div><div class="gentle-note">✳ <span>Numbers are only one small part of feeling well. Listen to your body, too.</span></div></section>
+              <section class="card list-card">              <div class="section-heading"><div><span class="eyebrow">YOUR CHECK-IN</span><h2>Today, so far</h2></div><div class="log-list-controls"><label class="log-sort-control"><span>Sort by time</span><select data-log-sort aria-label="Sort food log by time"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label><span class="count-pill" id="food-count">0 entries</span></div></div><div class="entry-list" id="food-entries"></div><div class="gentle-note">✳ <span>Numbers are only one small part of feeling well. Listen to your body, too.</span></div></section>
             </div>
           </section>
 
@@ -134,23 +184,75 @@
               <section class="card form-card"><span class="eyebrow">CELEBRATE THE MOVEMENT</span><h2>Log a session</h2><form id="exercise-form" class="stack-form"><label>What did you do?<input name="title" maxlength="100" placeholder="e.g. Brisk neighborhood walk" required></label><label>Duration or details <span class="optional">(optional — add duration and intensity)</span><input name="detail" maxlength="500" placeholder="e.g. 30 minutes, easy pace"></label><button class="estimate-button" id="estimate-exercise-button" type="button">Estimate with AI <span>✳</span></button><p class="estimate-notes" id="exercise-estimate-notes" aria-live="polite">Click Estimate with AI, or Add movement to generate a suggested estimate for review. Edit it before saving.</p><label>Estimated calories burned <span class="optional">kcal</span><input name="calories" type="number" min="0" max="10000"></label><label>Muscles or areas worked <span class="optional">(optional)</span><input name="muscleGroups" maxlength="160" placeholder="e.g. Legs, glutes, cardiovascular"></label><button class="primary-button" type="submit">Add movement <span>↗</span></button><p class="form-hint">Calorie-burn estimates vary widely from person to person. Estimates are general and not medical advice.</p></form></section>
               <section class="card recipe-card workout-card"><span class="eyebrow">A WORKOUT THAT MEETS YOU HERE</span><h2>Need an idea?</h2><p>Tell your coach what feels good today: your energy level, time, equipment, or muscle groups.</p><input id="workout-prompt" class="standalone-input" maxlength="500" placeholder="e.g. 20 minutes, low-impact, no equipment"><button class="primary-button" id="workout-button">Suggest a workout <span>✳</span></button><div class="assistant-output" id="workout-output"><div class="output-placeholder">A gentle idea will appear here ✳</div></div></section>
             </div>
-            <section class="card movement-history"><div class="section-heading"><div><span class="eyebrow">ALL MOVEMENT COUNTS</span><h2>Today's sessions</h2></div><span class="count-pill" id="movement-total">0 sessions</span></div><div class="entry-list" id="movement-entries"></div></section>
+            <section class="card movement-summary-card">
+              <div class="section-heading"><div><span class="eyebrow">TODAY'S MOVEMENT</span><h2>Muscles & areas worked</h2></div></div>
+              <div class="movement-muscle-summary"><span>From your logged sessions</span><strong id="movement-tab-muscles">None yet</strong></div>
+            </section>
+            <section class="card movement-history"><div class="section-heading"><div><span class="eyebrow">ALL MOVEMENT COUNTS</span><h2>Today's sessions</h2></div><div class="log-list-controls"><label class="log-sort-control"><span>Sort by time</span><select data-log-sort aria-label="Sort movement log by time"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label><span class="count-pill" id="movement-total">0 sessions</span></div></div><div class="entry-list" id="movement-entries"></div></section>
           </section>
 
-          <section class="view-panel" id="view-coach">
-            <div class="page-heading"><span class="eyebrow">HERE FOR THE LITTLE THINGS</span><h1>Your wellness <span>companion.</span></h1><p>Ask a question, find a new idea, or just check in. No judgment, ever.</p></div>
-            <div class="chat-layout card">
-              <div class="chat-intro"><span class="chat-avatar">✳</span><div><strong>Goodday coach</strong><span><i></i> Ready when you are</span></div><span class="ai-label">POWERED BY LLAMA 3.3</span></div>
-              <div class="chat-messages" id="chat-messages"><div class="message assistant-message"><span class="message-avatar">✳</span><div class="message-bubble"><p>Hi there! I'm here to help you find ideas that feel right for you. I can suggest recipes from your pantry, think up a workout, or help you reflect on your day. What's on your mind?</p><small>YOUR WELLNESS COMPANION</small></div></div></div>
-              <div class="suggestion-row"><button class="suggestion-chip">What could I make with my pantry?</button><button class="suggestion-chip">Suggest a gentle workout</button><button class="suggestion-chip">How's my day going?</button></div>
-              <form id="chat-form" class="chat-form"><label class="sr-only" for="chat-input">Message your wellness coach</label><textarea id="chat-input" maxlength="2000" rows="1" placeholder="Type or dictate a message..."></textarea><button id="chat-mic" class="voice-button" type="button" aria-label="Start voice input" title="Dictate a message">♩</button><button type="submit" aria-label="Send message">↑</button></form><div class="voice-status" id="voice-status" aria-live="polite"></div>
-              <div class="chat-disclaimer">General wellness ideas, not medical advice. AI can make mistakes; check important nutrition information. Voice input may be processed by your browser's speech service; spoken replies use your device's speech synthesis.</div>
-            </div>
-          </section>
+          <div class="coach-widget">
+            <section class="coach-panel" id="coach-panel" role="dialog" aria-modal="false" aria-labelledby="coach-title" aria-hidden="true" hidden>
+              <div class="chat-layout card">
+                <div class="chat-intro"><span class="chat-avatar">✳</span><div><strong id="coach-title">Goodday coach</strong><span><i></i> Ready when you are</span></div><span class="ai-label">LLAMA 3.3</span><button class="coach-close" id="coach-close" type="button" aria-label="Close coach chat">×</button></div>
+                <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"><div class="message assistant-message"><span class="message-avatar">✳</span><div class="message-bubble"><p>Hi there! I'm here to help you find ideas that feel right for you. I can suggest recipes from your pantry, think up a workout, or help you reflect on your day. What's on your mind?</p><small>YOUR WELLNESS COMPANION</small></div></div></div>
+                <div class="suggestion-row"><button class="suggestion-chip" type="button">What could I make with my pantry?</button><button class="suggestion-chip" type="button">Suggest a gentle workout</button><button class="suggestion-chip" type="button">How's my day going?</button></div>
+                <form id="chat-form" class="chat-form"><label class="sr-only" for="chat-input">Message your wellness coach</label><textarea id="chat-input" maxlength="2000" rows="1" placeholder="Type or dictate a message..."></textarea><button id="chat-mic" class="voice-button" type="button" aria-label="Start voice input" title="Dictate a message">♩</button><button type="submit" aria-label="Send message">↑</button></form><div class="voice-status" id="voice-status" aria-live="polite"></div>
+                <div class="chat-disclaimer">General wellness ideas, not medical advice. AI can make mistakes; check important nutrition information. Voice input may be processed by your browser's speech service; spoken replies use your device's speech synthesis.</div>
+              </div>
+            </section>
+            <button class="coach-launcher" id="coach-launcher" type="button" aria-label="Open AI coach chat" aria-controls="coach-panel" aria-expanded="false"><span aria-hidden="true">✳</span><span class="coach-launcher-label">Ask your coach</span></button>
+          </div>
 
           <section class="view-panel" id="view-goals">
-            <div class="page-heading"><span class="eyebrow">YOUR GUIDES, YOUR WAY</span><h1>Daily <span>guides.</span></h1><p>These are optional reference points, not rules. Choose what feels useful to you.</p></div>
-            <section class="card form-card goals-form-card"><form id="goals-form" class="stack-form"><label>Calorie guide <span class="optional">kcal</span><input name="calories" type="number" min="500" max="10000" required></label><label>Protein guide <span class="optional">g</span><input name="protein" type="number" min="10" max="1000" required></label><button class="primary-button" type="submit">Save my guides <span>↗</span></button></form><p class="form-hint">If you have health or nutrition concerns, a qualified healthcare professional or registered dietitian can offer personalized guidance.</p></section>
+            <div class="page-heading"><span class="eyebrow">YOUR GUIDES, YOUR WAY</span><h1>Goals & <span>profile.</span></h1><p>Personalize your coach with goals and context that matter to you. Everything here is optional.</p></div>
+            <div class="content-columns profile-columns">
+              <section class="card form-card goals-form-card"><span class="eyebrow">OPTIONAL DAILY GUIDES</span><h2>Reference points</h2><form id="goals-form" class="stack-form"><label>Calorie guide <span class="optional">kcal</span><input name="calories" type="number" min="500" max="10000" required></label><label>Protein guide <span class="optional">g</span><input name="protein" type="number" min="10" max="1000" required></label><button class="primary-button" type="submit">Save my guides <span>↗</span></button></form><p class="form-hint">These are optional guides, not rules. For personalized nutrition guidance, talk with a qualified healthcare professional or registered dietitian.</p></section>
+              <section class="card form-card fitness-profile-card"><span class="eyebrow">YOUR COACH, YOUR CONTEXT</span><h2>Fitness profile</h2>
+                <form id="fitness-profile-form" class="stack-form">
+                  <label>What are you working toward?
+                    <select name="fitnessGoal">
+                      <option value="general_fitness">General fitness</option>
+                      <option value="weight_loss">Weight management</option>
+                      <option value="build_muscle">Build strength or muscle</option>
+                      <option value="event_training">Train for an event</option>
+                      <option value="maintain">Maintain my current routine</option>
+                    </select>
+                  </label>
+                  <label>More about your goal <span class="optional">(optional)</span><textarea name="goalDetails" rows="2" maxlength="300" placeholder="What would feeling successful look like?"></textarea></label>
+                  <div class="profile-form-grid">
+                    <label>Age <span class="optional">(optional)</span><input name="age" type="number" min="1" max="120" step="1" inputmode="numeric"></label>
+                    <label>Gender identity <span class="optional">(optional)</span><input name="genderIdentity" maxlength="60" placeholder="Your words, if you wish"></label>
+                    <label>Height <span class="optional">cm · optional</span><input name="heightCm" type="number" min="80" max="250" step="0.1" inputmode="decimal"></label>
+                    <label>Weight <span class="optional">kg · optional</span><input name="weightKg" type="number" min="20" max="400" step="0.1" inputmode="decimal"></label>
+                    <label>Usual activity level
+                      <select name="activityLevel">
+                        <option value="">Not specified</option>
+                        <option value="low">Mostly sitting</option>
+                        <option value="light">Lightly active</option>
+                        <option value="moderate">Moderately active</option>
+                        <option value="high">Very active</option>
+                      </select>
+                    </label>
+                    <label>Training experience
+                      <select name="trainingExperience">
+                        <option value="">Not specified</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Experienced</option>
+                      </select>
+                    </label>
+                    <label>Event or target <span class="optional">(optional)</span><input name="targetEvent" maxlength="100" placeholder="e.g. A local 5K"></label>
+                    <label>Event date <span class="optional">(optional)</span><input name="targetEventDate" type="date"></label>
+                  </div>
+                  <label>Injuries, access needs, or limitations <span class="optional">(optional)</span><textarea name="limitations" rows="2" maxlength="500" placeholder="Anything you would like your coach to consider"></textarea></label>
+                  <label>Equipment available <span class="optional">(optional)</span><input name="equipment" maxlength="250" placeholder="e.g. Resistance bands, no equipment"></label>
+                  <label>Activities you enjoy <span class="optional">(optional)</span><input name="preferredActivities" maxlength="250" placeholder="e.g. Walking, swimming, strength training"></label>
+                  <button class="primary-button" type="submit">Save my profile <span>↗</span></button>
+                </form>
+                <p class="form-hint">Profile details are optional and used to tailor coach suggestions. Gender identity is used only for respectful wording, not to infer physiology. If you are under 18, the coach avoids weight-loss and restrictive-diet advice. This app is not medical care.</p>
+              </section>
+            </div>
           </section>
           <footer class="page-footer"><span>GOODDAY, AT YOUR OWN PACE.</span><span>Made for feeling good, not being perfect <b>✳</b></span></footer>
         </div>

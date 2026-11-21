@@ -9,15 +9,26 @@ The Worker API is organized under `src/routes/` with shared request and profile 
 - Logs meals and snacks with calories, protein, carbohydrates, fat, and fiber, and tracks daily totals against editable, optional guides.
 - Logs movement, estimated calorie burn, duration/details, and muscle groups.
 - Groups recent meal and movement entries by day and summarizes logged days, meals, calories, protein, and sessions across the last 30 days.
+- Shows progress charts for calories, macros, fiber, movement sessions, and movement calories over 7-day, 30-day, 90-day, and yearly ranges.
+- Offers an optional fitness profile for goals, age, gender identity, activity level, training experience, target events, limitations, equipment, and preferred activities; the coach uses it to tailor suggestions.
 - Saves pantry ingredients and asks the assistant for recipe ideas and a shopping list.
 - Provides a wellness chat and workout suggestions grounded in today's logged entries and pantry.
 - Lets users explicitly ask the chat coach to log a meal or exercise; the entry is saved only after the AI action and database write succeed.
 - Uses Workers AI to estimate meal calories and nutrients or workout calories and muscle groups; suggestions are editable before logging.
 - Supports browser voice dictation and spoken assistant replies where the browser provides Web Speech APIs.
-- Keeps a browser profile ID, entries, pantry, goals, and recent chat history in D1.
-- Seeds three repeatable local demo profiles with varied 30-day food and movement logs when starting local development.
+- Keeps each signed-in account's entries, pantry, goals, fitness profile, and recent chat history in D1.
+- Seeds three repeatable local demo accounts with varied 30-day food and movement logs when starting local development.
+- Provides username/password registration and sign-in, with a persistent 30-day secure session cookie.
 
-Nutrition and activity values are user-entered or AI-generated estimates. Review estimates before saving; exercise calorie estimates vary by person. Voice dictation may send audio through the browser's speech-recognition service, while spoken replies use browser speech synthesis. This is a general wellness tool, not medical advice. The MVP does not include authentication: the browser-generated profile ID is an identifier, not a secure login. Add Cloudflare Access or another authentication mechanism and enforce verified user identity before using this for sensitive or production data.
+Nutrition and activity values are user-entered or AI-generated estimates. Review estimates before saving; exercise calorie estimates vary by person. Voice dictation may send audio through the browser's speech-recognition service, while spoken replies use browser speech synthesis. This is a general wellness tool, not medical advice.
+
+Fitness profile fields are optional and editable. Gender identity is used only for respectful wording, not to infer physiology. The coach avoids weight-loss and restrictive-diet advice for users under 18. Profile information is stored in D1 alongside the user's other tracker data. A muscle-group body diagram is deferred as a future design enhancement; the Movement view currently shows a text summary instead.
+
+## Accounts and data protection
+
+Users can create an account with a unique username and a password of at least 12 characters. Passwords are never stored in readable or reversibly encrypted form: the Worker stores a per-account random salt and a PBKDF2-HMAC-SHA-256 hash (600,000 iterations). The Worker redirects production HTTP requests to HTTPS and enables HSTS; the opaque, random session token is delivered in a `Secure`, `HttpOnly`, `SameSite=Strict` cookie, while only its SHA-256 hash is stored in D1. Sessions expire after 30 days, and failed sign-ins and account creation are rate-limited. Protected API routes use the signed-in account identity from the server session, not a browser-supplied profile ID.
+
+Run the local startup script to create three demo accounts along with the sample data. For example, sign in with username `demo1` and password `GooddayDemo2026-1!`. These are development-only credentials; do not seed them into a production database. New accounts currently have no email verification or password-recovery flow, so add those (and consider Cloudflare Access or MFA) before using the app for production or sensitive data. Keep all profile details optional and only enter information you are comfortable storing.
 
 ## Run locally
 

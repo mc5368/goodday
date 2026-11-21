@@ -3,6 +3,13 @@ INSERT OR IGNORE INTO profiles (user_id, calorie_goal, protein_goal) VALUES
   ('22222222-2222-4222-8222-222222222222', 1900, 100),
   ('33333333-3333-4333-8333-333333333333', 2300, 140);
 
+INSERT OR IGNORE INTO user_accounts
+  (user_id, username, password_salt, password_hash, password_iterations)
+VALUES
+  ('11111111-1111-4111-8111-111111111111', 'demo1', '737888730d55e5635cc920277960e7e0', '5b8fab6cefe54c7e48379da7dd31694feb783759819e9a52b11ab26151009c39', 600000),
+  ('22222222-2222-4222-8222-222222222222', 'demo2', '044822678ce395ac89653b04a03cd151', '81b9d012e15457e7b7a6763219384c11a7bdfae7b06a1118a93b450f548516fa', 600000),
+  ('33333333-3333-4333-8333-333333333333', 'demo3', '79125f179183fbe7a85840e217979963', '69e4eca50f55705f0f46b4a807fe94c6e49805a9b6ed8b56df2e1ebed0fbbbad', 600000);
+
 INSERT OR IGNORE INTO pantry (user_id, ingredient) VALUES
   ('11111111-1111-4111-8111-111111111111', 'Oats'),
   ('11111111-1111-4111-8111-111111111111', 'Blueberries'),
@@ -20,11 +27,11 @@ INSERT OR IGNORE INTO pantry (user_id, ingredient) VALUES
   ('33333333-3333-4333-8333-333333333333', 'Sweet potatoes'),
   ('33333333-3333-4333-8333-333333333333', 'Lentils');
 
-INSERT INTO entries
+INSERT OR IGNORE INTO entries
   (id, user_id, type, title, detail, calories, protein, carbs, fat, fiber, muscle_groups, created_at)
 VALUES
-  ('demo-a-meal-01', '11111111-1111-4111-8111-111111111111', 'meal', 'Blueberry yogurt oats', 'Oats, Greek yogurt, blueberries', 410, 24, 58, 9, 8, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-0 days')),
-  ('demo-a-meal-02', '11111111-1111-4111-8111-111111111111', 'meal', 'Chickpea spinach bowl', 'Brown rice, lemon tahini', 620, 22, 86, 20, 14, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-0 days')),
+  ('demo-a-meal-01', '11111111-1111-4111-8111-111111111111', 'meal', 'Blueberry yogurt oats', 'Oats, Greek yogurt, blueberries', 410, 24, 58, 9, 8, '', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-45 minutes')),
+  ('demo-a-meal-02', '11111111-1111-4111-8111-111111111111', 'meal', 'Chickpea spinach bowl', 'Brown rice, lemon tahini', 620, 22, 86, 20, 14, '', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-35 minutes')),
   ('demo-a-meal-03', '11111111-1111-4111-8111-111111111111', 'meal', 'Apple and peanut butter', 'Afternoon snack', 230, 7, 29, 12, 5, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-1 days')),
   ('demo-a-ex-01', '11111111-1111-4111-8111-111111111111', 'exercise', 'Neighborhood walk', '35 minutes, easy pace', 145, 0, 0, 0, 0, 'Legs, cardiovascular', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-1 days')),
   ('demo-a-meal-04', '11111111-1111-4111-8111-111111111111', 'meal', 'Avocado egg toast', 'Two slices wholegrain toast', 460, 21, 42, 24, 11, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-2 days')),
@@ -43,7 +50,7 @@ VALUES
   ('demo-a-meal-14', '11111111-1111-4111-8111-111111111111', 'meal', 'Black bean tacos', 'Avocado salsa, corn tortillas', 570, 24, 78, 19, 17, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-20 days')),
   ('demo-a-ex-05', '11111111-1111-4111-8111-111111111111', 'exercise', 'Stretch and mobility', '15 minutes', 40, 0, 0, 0, 0, 'Hips, shoulders, back', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-20 days')),
 
-  ('demo-b-meal-01', '22222222-2222-4222-8222-222222222222', 'meal', 'Tofu veggie stir-fry', 'Rice, broccoli, sesame', 590, 31, 74, 19, 9, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-0 days')),
+  ('demo-b-meal-01', '22222222-2222-4222-8222-222222222222', 'meal', 'Tofu veggie stir-fry', 'Rice, broccoli, sesame', 590, 31, 74, 19, 9, '', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-30 minutes')),
   ('demo-b-meal-02', '22222222-2222-4222-8222-222222222222', 'meal', 'Peanut butter toast', 'Wholegrain bread', 350, 14, 38, 17, 6, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-3 days')),
   ('demo-b-ex-01', '22222222-2222-4222-8222-222222222222', 'exercise', 'Dance break', '20 minutes, just for fun', 130, 0, 0, 0, 0, 'Full body, cardiovascular', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-3 days')),
   ('demo-b-meal-03', '22222222-2222-4222-8222-222222222222', 'meal', 'Miso noodle soup', 'Tofu, bok choy, mushrooms', 480, 26, 62, 13, 8, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-6 days')),
@@ -54,9 +61,9 @@ VALUES
   ('demo-b-ex-03', '22222222-2222-4222-8222-222222222222', 'exercise', 'Beginner bodyweight circuit', 'Three easy rounds', 155, 0, 0, 0, 0, 'Legs, core, arms', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-18 days')),
   ('demo-b-meal-07', '22222222-2222-4222-8222-222222222222', 'meal', 'Sesame soba bowl', 'Cucumber, carrots, tofu', 545, 29, 70, 17, 10, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-24 days')),
 
-  ('demo-c-meal-01', '33333333-3333-4333-8333-333333333333', 'meal', 'Egg and avocado toast', 'Sourdough, cherry tomatoes', 485, 22, 46, 25, 10, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-0 days')),
-  ('demo-c-meal-02', '33333333-3333-4333-8333-333333333333', 'meal', 'Salmon grain bowl', 'Quinoa, greens, lemon', 710, 43, 68, 29, 9, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-0 days')),
-  ('demo-c-ex-01', '33333333-3333-4333-8333-333333333333', 'exercise', 'Strength training', '45 minutes at the gym', 280, 0, 0, 0, 0, 'Back, chest, arms', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-0 days')),
+  ('demo-c-meal-01', '33333333-3333-4333-8333-333333333333', 'meal', 'Egg and avocado toast', 'Sourdough, cherry tomatoes', 485, 22, 46, 25, 10, '', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-25 minutes')),
+  ('demo-c-meal-02', '33333333-3333-4333-8333-333333333333', 'meal', 'Salmon grain bowl', 'Quinoa, greens, lemon', 710, 43, 68, 29, 9, '', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-20 minutes')),
+  ('demo-c-ex-01', '33333333-3333-4333-8333-333333333333', 'exercise', 'Strength training', '45 minutes at the gym', 280, 0, 0, 0, 0, 'Back, chest, arms', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-15 minutes')),
   ('demo-c-meal-03', '33333333-3333-4333-8333-333333333333', 'meal', 'Apple and almonds', 'Afternoon snack', 260, 7, 30, 15, 7, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-1 days')),
   ('demo-c-meal-04', '33333333-3333-4333-8333-333333333333', 'meal', 'Turkey hummus wrap', 'Spinach and cucumber', 560, 36, 57, 20, 8, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-2 days')),
   ('demo-c-ex-02', '33333333-3333-4333-8333-333333333333', 'exercise', 'Easy swim', '30 minutes, relaxed pace', 220, 0, 0, 0, 0, 'Full body, cardiovascular', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-2 days')),
@@ -73,5 +80,17 @@ VALUES
   ('demo-c-meal-12', '33333333-3333-4333-8333-333333333333', 'meal', 'Mushroom omelet', 'Side of sourdough toast', 445, 29, 37, 21, 5, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-17 days')),
   ('demo-c-meal-13', '33333333-3333-4333-8333-333333333333', 'meal', 'Shrimp rice noodle bowl', 'Cabbage, herbs, lime', 610, 35, 83, 15, 8, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-21 days')),
   ('demo-c-ex-06', '33333333-3333-4333-8333-333333333333', 'exercise', 'Gentle stretch', '20 minutes before bed', 45, 0, 0, 0, 0, 'Hips, shoulders', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-21 days')),
-  ('demo-c-meal-14', '33333333-3333-4333-8333-333333333333', 'meal', 'Spinach feta frittata', 'With a side salad', 495, 31, 28, 29, 6, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-26 days'))
-ON CONFLICT(id) DO UPDATE SET created_at = excluded.created_at;
+  ('demo-c-meal-14', '33333333-3333-4333-8333-333333333333', 'meal', 'Spinach feta frittata', 'With a side salad', 495, 31, 28, 29, 6, '', strftime('%Y-%m-%dT12:00:00.000Z', 'now', '-26 days'));
+
+UPDATE entries SET created_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-45 minutes')
+WHERE id = 'demo-a-meal-01' AND created_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now');
+UPDATE entries SET created_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-35 minutes')
+WHERE id = 'demo-a-meal-02' AND created_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now');
+UPDATE entries SET created_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-30 minutes')
+WHERE id = 'demo-b-meal-01' AND created_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now');
+UPDATE entries SET created_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-25 minutes')
+WHERE id = 'demo-c-meal-01' AND created_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now');
+UPDATE entries SET created_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-20 minutes')
+WHERE id = 'demo-c-meal-02' AND created_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now');
+UPDATE entries SET created_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-15 minutes')
+WHERE id = 'demo-c-ex-01' AND created_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now');

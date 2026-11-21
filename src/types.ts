@@ -26,6 +26,39 @@ export interface GoalsInput {
   protein: unknown;
 }
 
+export interface FitnessProfileInput {
+  userId: string;
+  fitnessGoal: unknown;
+  goalDetails: unknown;
+  age: unknown;
+  genderIdentity: unknown;
+  heightCm: unknown;
+  weightKg: unknown;
+  activityLevel: unknown;
+  trainingExperience: unknown;
+  targetEvent: unknown;
+  targetEventDate: unknown;
+  limitations: unknown;
+  equipment: unknown;
+  preferredActivities: unknown;
+}
+
+export interface FitnessProfile {
+  fitnessGoal: string;
+  goalDetails: string;
+  age: number | null;
+  genderIdentity: string;
+  heightCm: number | null;
+  weightKg: number | null;
+  activityLevel: string;
+  trainingExperience: string;
+  targetEvent: string;
+  targetEventDate: string;
+  limitations: string;
+  equipment: string;
+  preferredActivities: string;
+}
+
 export interface PantryInput {
   userId: string;
   ingredients: unknown;

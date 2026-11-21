@@ -1,4 +1,7 @@
-const jsonHeaders = { "content-type": "application/json; charset=utf-8" };
+const jsonHeaders = {
+  "content-type": "application/json; charset=utf-8",
+  "cache-control": "no-store",
+};
 
 export function json(data: unknown, status = 200): Response {
   return Response.json(data, { status, headers: jsonHeaders });

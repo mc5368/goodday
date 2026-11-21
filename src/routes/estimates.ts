@@ -242,6 +242,7 @@ export async function estimateEntry(env: Env, input: EstimateInput): Promise<Res
   return json({ estimate });
 }
 
-export async function handleEstimate(request: Request, env: Env): Promise<Response> {
-  return estimateEntry(env, await bodyOf<EstimateInput>(request));
+export async function handleEstimate(request: Request, env: Env, userId: string): Promise<Response> {
+  const input = await bodyOf<EstimateInput>(request);
+  return estimateEntry(env, { ...input, userId });
 }
